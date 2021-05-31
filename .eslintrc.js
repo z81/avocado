@@ -1,8 +1,19 @@
 module.exports = {
-  extends: 'erb',
+  extends: 'airbnb-typescript-prettier',
+  plugins: ['unused-imports'],
   rules: {
     // A temporary hack related to IDE not resolving correct package.json
     'import/no-extraneous-dependencies': 'off',
+    'import/prefer-default-export': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    '@typescript-eslint/no-shadow': 'off',
+    '@typescript-eslint/no-redeclare': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'no-underscore-dangle': 'off',
+    'func-names': 'off',
+    'no-param-reassign': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

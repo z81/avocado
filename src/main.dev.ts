@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint global-require: off, no-console: off */
 
 /**
@@ -72,6 +73,8 @@ const createWindow = async () => {
     width: 1024,
     height: 728,
     icon: getAssetPath('icon.png'),
+    // frame: false,
+    // titleBarStyle: 'hidden', // add this line
     webPreferences: {
       nodeIntegration: true,
     },

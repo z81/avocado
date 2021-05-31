@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import App from './App';
+import './backend/app';
+import { App } from './components/App/App';
 
 render(<App />, document.getElementById('root'));

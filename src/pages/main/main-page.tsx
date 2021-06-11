@@ -4,11 +4,11 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Container from '@material-ui/core/Container/Container';
 import TextField from '@material-ui/core/TextField/TextField';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useStore } from 'effector-react';
+import { observer } from 'mobx-react-lite';
 import {
   $tvShowsLoadingStore,
   searchTvShow,
@@ -19,6 +19,8 @@ import {
   getTvShowInfo as fetchTvShowInfo,
   selectTvShow,
 } from '../../stores/selectedTvShowStore';
+import { useTitle } from '../../hooks/useTitle';
+import { Layout } from '../../components/layout/Layout';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const MainPage = () => {
+export const MainPage = observer(() => {
+  useTitle('Поиск по названию');
   const classes = useStyles();
   const tvShows = useStore(TvShowsStore);
   const selectedTvShow = useStore($selectedTvShow);
@@ -49,9 +52,8 @@ export const MainPage = () => {
   const history = useHistory();
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Layout>
       <div className={classes.paper}>
-        {/* {store.count} */}
         <Autocomplete
           className={classes.search}
           options={tvShows}
@@ -107,12 +109,12 @@ export const MainPage = () => {
                   </>
                 ),
               }}
-              label="Search by name"
+              label="Поиск по названию"
               variant="outlined"
             />
           )}
         />
       </div>
-    </Container>
+    </Layout>
   );
-};
+});

@@ -2,13 +2,14 @@ import * as T from '@effect-ts/core/Effect';
 import { pipe } from '@effect-ts/core/Function';
 import * as Chunk from '@effect-ts/core/Collections/Immutable/Chunk';
 import * as A from '@effect-ts/core/Collections/Immutable/Array';
-import { loadPage } from '../fetch/fetchPage.resolver';
+import * as cheerio from 'cheerio';
+import { fetchPage } from '../fetch/fetchPage.resolver';
 
 export const kinopoiskSearch = (title: string) =>
   T.gen(function* (_) {
     const baseUrl = 'https://www.kinopoisk.ru';
     const url = `${baseUrl}/index.php?kp_query=${encodeURIComponent(title)}`;
-    const $ = yield* _(loadPage(url));
+    const $ = cheerio.load(yield* _(fetchPage(url)));
 
     const result = yield* _(
       pipe(

@@ -2,14 +2,17 @@ import * as T from '@effect-ts/core/Effect';
 import * as A from '@effect-ts/core/Collections/Immutable/Array';
 import { pipe } from '@effect-ts/core/Function';
 import * as Chunk from '@effect-ts/core/Collections/Immutable/Chunk';
-import { loadPage } from '../fetch/fetchPage.resolver';
+import * as cheerio from 'cheerio';
+import { fetchPage } from '../fetch/fetchPage.resolver';
 
 export const kinopoiskGetInfo = (id: string) =>
   T.gen(function* (_) {
     const baseUrl = 'https://www.kinopoisk.ru';
     const url = `${baseUrl}/series/${encodeURIComponent(id)}`;
-    const $main = yield* _(loadPage(url));
-    const $se = yield* _(loadPage(`${baseUrl}/film/${id}/episodes/`));
+    const $main = cheerio.load(yield* _(fetchPage(url)));
+    const $se = cheerio.load(
+      yield* _(fetchPage(`${baseUrl}/film/${id}/episodes/`))
+    );
 
     const seasonsItems = yield* _(
       T.succeedWith(() =>

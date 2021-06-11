@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-constructor */
 /* eslint-disable max-classes-per-file */
 
 export class HTTPTimeoutError {

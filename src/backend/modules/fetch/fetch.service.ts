@@ -8,9 +8,9 @@ import fetch from 'node-fetch';
 
 const abortController = new AbortController();
 
-type ResponseToPromise<T> = (r: Response) => Promise<T>;
+export type ResponseToPromise<T> = (r: Response) => Promise<T>;
 
-const fetchEffect =
+const _fetchEffect =
   <T>(fn: ResponseToPromise<T>) =>
   (url: string) =>
     T.effectAsyncInterrupt<unknown, FetchError, T>((resolve) => {
@@ -25,8 +25,10 @@ const fetchEffect =
 const makeFetchService = pipe(
   T.succeedWith(() => {
     return {
-      fetchJSON: flow(fetchEffect<unknown>((t) => t.json())),
-      fetchText: flow(fetchEffect<string>((t) => t.text())),
+      fetchJSON: flow(_fetchEffect<unknown>((t) => t.json())),
+      fetchText: flow(_fetchEffect<string>((t) => t.text())),
+      fetchBuffer: flow(_fetchEffect<Buffer>((t) => t.buffer())),
+      fetchEffect: _fetchEffect,
     };
   })
 );
@@ -38,3 +40,6 @@ export const LiveFetchService = L.fromEffect(FetchService)(makeFetchService);
 
 export const fetchText = (url: string) =>
   T.accessServiceM(FetchService)(({ fetchText }) => fetchText(url));
+
+export const fetchEffect = <T>(url: string, clb: ResponseToPromise<T>) =>
+  T.accessServiceM(FetchService)(({ fetchEffect }) => fetchEffect(clb)(url));
